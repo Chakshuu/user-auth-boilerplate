@@ -6,6 +6,7 @@ const {
   refresh,
   user
 } = require('../controllers/authController');
+const authentication = require('../middleware/authentication');
 const router = express.Router();
 
 router.post('/register', register);
@@ -16,6 +17,6 @@ router.post('/logout', logout);
 
 router.post('/refresh', refresh);
 
-router.get('/user', user);
+router.get('/user', authentication, user);
 
 module.exports = router;
