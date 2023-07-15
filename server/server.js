@@ -30,16 +30,16 @@ app.use(express.urlencoded({ extended: false }));
 // middleware for cookies
 app.use(cookieParser());
 
-// middleware for error handlers
-app.use(errorHandler);
-
 // Routes
 app.use('/api/auth', require('./routes/auth'));
 
-app.all('*', (req, res) => {
-  res.status(404);
-  throw new Error('404 Not Found');
-});
+// app.all('*', (req, res) => {
+//   res.status(404);
+//   throw new Error('404 Not Found');
+// });
+
+// middleware for error handlers
+app.use(errorHandler);
 
 mongoose.connection.once('open', () => {
   app.listen(port, () => {
