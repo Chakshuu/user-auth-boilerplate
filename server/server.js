@@ -15,17 +15,17 @@ const port = process.env.PORT || 5000;
 // Connect DB
 connectDb();
 
-// CORS
-app.use(cors(corsOptions));
-
 // Allow Credentials
 app.use(credentials);
 
-// application/json response
-app.use(express.json());
+// CORS
+app.use(cors(corsOptions));
 
 // application.x-www-form-urlencoded
 app.use(express.urlencoded({ extended: false }));
+
+// application/json response
+app.use(express.json());
 
 // middleware for cookies
 app.use(cookieParser());

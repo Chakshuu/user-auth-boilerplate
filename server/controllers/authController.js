@@ -88,8 +88,8 @@ const login = asyncHandler( async(req, res,) => {
     res.cookie(
       'refresh_token',
       refreshToken,
-      { httpOnly: true, maxAge: 24*60*60*1000 }
-      // { httpOnly: true, maxAge: 24*60*60*1000, sameSite: 'None', secure: true }
+      // { httpOnly: true, maxAge: 24*60*60*1000 }
+      { httpOnly: true, maxAge: 24*60*60*1000, sameSite: 'None', secure: true }
     );
 
     res.status(200).json({ access_token: accessToken });
@@ -115,16 +115,16 @@ const logout = asyncHandler( async(req, res,) => {
   // Check if user exists
   if (!user) {
     // Clear cookies and send the error response
-    res.clearCookie('refresh_token', { httpOnly: true });
-    // res.clearCookie('refresh_token', { httpOnly: true, sameSite: 'None', secure: true });
+    // res.clearCookie('refresh_token', { httpOnly: true });
+    res.clearCookie('refresh_token', { httpOnly: true, sameSite: 'None', secure: true });
     res.status(204);
     throw new Error('User not found');
   }
   // Save refresh_token to null, clear cookies, and send the response
   user.refresh_token = null;
   user.save();
-  res.clearCookie('refresh_token', { httpOnly: true });
-  // res.clearCookie('refresh_token', { httpOnly: true, sameSite: 'None', secure: true });
+  // res.clearCookie('refresh_token', { httpOnly: true });
+  res.clearCookie('refresh_token', { httpOnly: true, sameSite: 'None', secure: true });
   res.status(200).json({ message: 'Logut successfully' });
 });
 
@@ -173,7 +173,7 @@ const refresh = asyncHandler( async(req, res,) => {
 //@route POST /api/auth/user
 //@access private
 const user = asyncHandler( async(req, res,) => {
-  const user = req.user;
+  const user = await User.findOne({ email: req.user.email }, { password: 0, refresh_token: 0});
   res.status(200).json(user);
 });
 
